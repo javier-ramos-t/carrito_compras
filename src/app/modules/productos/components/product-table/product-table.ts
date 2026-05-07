@@ -8,7 +8,7 @@ import { ProductoInterface } from '../../models/product.models'
   styleUrl: './product-table.css',
 })
 export class ProductTable {
-@Input({required: true}) public products: ProductoInterface[] = []
+@Input() public products: ProductoInterface[] = []
 
 @Output() public edit = new EventEmitter<number>();
 @Output() public delete = new EventEmitter<number>();
