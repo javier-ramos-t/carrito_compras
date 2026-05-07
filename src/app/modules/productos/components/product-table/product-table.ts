@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ProductoInterface } from '../../models/product.models'
+import { ProductInterface } from '../../models/product.models'
 
 @Component({
   selector: 'app-product-table',
@@ -8,7 +8,10 @@ import { ProductoInterface } from '../../models/product.models'
   styleUrl: './product-table.css',
 })
 export class ProductTable {
-@Input() public products: ProductoInterface[] = []
+  constructor(){
+    console.log(this.products)
+  }
+@Input({required: true}) public products: ProductInterface[] = []
 
 @Output() public edit = new EventEmitter<number>();
 @Output() public delete = new EventEmitter<number>();

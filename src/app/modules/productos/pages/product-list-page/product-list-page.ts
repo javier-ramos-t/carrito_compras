@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductTable } from '@modules/productos/components/product-table/product-table'
 
@@ -23,8 +23,7 @@ export class ProductListPage implements OnInit {
 
   }
 
-  public products: ProductInterface[] = []
-
+  public readonly products = signal<ProductInterface[]>([])
 
   goLogin():void {
     this.router.navigate(['/login'])
@@ -42,7 +41,8 @@ export class ProductListPage implements OnInit {
   public ngOnInit():void{
     this.productService.getAllProducts()
     .subscribe((data:ApiResponse)=>{
-      this.products = data.results;
+      console.log(data.results)
+      this.products.set(data.results?? [])
     });
   }
 }
