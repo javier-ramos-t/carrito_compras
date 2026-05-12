@@ -12,7 +12,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       
       if(error.status === 0) {
         console.error('Error de red', error.message)
-      } else if (error.status === 404) {
+      } else if (error.status === 401) {
+        alert(error.error.detail)
+      }else if (error.status === 404) {
         console.error('Recurso no encontrado', error.message)
       } else if (error.status === 503) {
         console.error('Error interno del servidor', error.message)
