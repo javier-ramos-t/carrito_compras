@@ -41,9 +41,26 @@
           <input id="pm-name" class="input" type="text" placeholder="Ej: Sudadera" />
         </div>
         <div class="field">
+          <label class="label" for="pm-price">Descripción</label>
+          <input id="pm-price" class="input" type="number" min="0" step="0.01"  />
+        </div>
+        <div class="field">
           <label class="label" for="pm-price">Precio</label>
           <input id="pm-price" class="input" type="number" min="0" step="0.01"  />
         </div>
+        <div class="field">
+          <label class="label" for="pm-price">Categoria</label>
+          <select  class="input" id="product-category" formControlName="category" required>
+            <option value="">Selecciona una categoría</option>
+            <option value="1">
+                Electronica
+            </option>
+            <option value="2">
+              prueba
+          </option>
+        </select>
+        </div>
+  
         <div class="form__row form__row--2">
           <div class="field">
             <label class="label" for="pm-stock">Stock</label>

@@ -67,4 +67,8 @@ export class ProductListPage implements OnInit {
     }
   }
 
+
+
+  
+
 }

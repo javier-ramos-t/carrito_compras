@@ -18,27 +18,18 @@
                 <label class="label" for="email">Nombre de Usuario</label>
                 <input id="email" class="input" type="input" formControlName="username" placeholder="Nombre de Usuario" />
                 
-                @if(loginForm.get('username')?.errors?.['required'] && loginForm.get('username')?.touched){
-                  <p class="error"> Usuario Requerido </p>
+                @if(isFieldInvalid('username')){
+                  <p class="error"> {{getFieldError('username')}} </p>
                 }
-
-                @if(loginForm.get('username')?.errors?.['minlength'] && loginForm.get('username')?.touched){
-                  <p class="error"> Minimo 3 caracteres </p>
-                }
-
-                @if(loginForm.get('username')?.errors?.['maxlength'] && loginForm.get('username')?.touched){
-                  <p class="error"> Maximo 10 caracteres </p>
-                }
-
-
-
+                
+                
               </div>
               <div class="field">
                 <label class="label" for="pass">Contraseña</label>
                 <input id="pass" class="input" type="password" formControlName="password" placeholder="••••••••" />
 
-                @if(loginForm.get('password')?.errors?.['required'] && loginForm.get('password')?.touched){
-                  <p class="error"> Usuario Requerido </p>
+                @if(isFieldInvalid('password')){
+                  <p class="error"> {{getFieldError('password')}} </p>
                 }
               </div>
               <div class="form__row">
