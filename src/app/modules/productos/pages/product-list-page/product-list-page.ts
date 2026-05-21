@@ -1,13 +1,15 @@
-import { Component, OnInit, signal, viewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, inject, signal, viewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductTable } from '@modules/productos/components/product-table/product-table'
 
 import   { ProductoService } from '@core/service/producto'
-import { ApiResponse, ProductInterface } from '@modules/productos/models/product.models'
+import { ApiResponse, ProductInterface, ProductRequest } from '@modules/productos/models/product.models'
+import { ReactiveFormsModule, FormBuilder, Validators  } from '@angular/forms'
+import { FormErrorService } from '@shared/services/form-error';
 
 @Component({
   selector: 'app-product-list-page',
-  imports: [ProductTable],
+  imports: [ReactiveFormsModule, ProductTable],
   templateUrl: './product-list-page.html',
   styleUrl: './product-list-page.css',
 })
@@ -22,6 +24,18 @@ export class ProductListPage implements OnInit {
     console.log(this.routerActivate.snapshot.params['id2'])
 
   }
+
+  private fb = inject(FormBuilder);
+  private formErrorService = inject(FormErrorService);
+
+  public productForm = this.fb.nonNullable.group({
+    name:['', [Validators.required,Validators.minLength(3)]],
+    description:['', [Validators.required,Validators.minLength(5)]],
+    price:[0, [Validators.required,Validators.minLength(0.01)]],
+    stock:[0, [Validators.required,Validators.minLength(0)]],
+    category:[0, [Validators.required,Validators.minLength(1)]]
+  }
+  )
 
   public readonly products = signal<ProductInterface[]>([])
   private readonly dialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('ProductDialog')
@@ -65,8 +79,46 @@ export class ProductListPage implements OnInit {
     if(event.target === event.currentTarget){
       this.closeModal()
     }
+
+    
+
   }
 
+  public isFieldInvalid(field: string): boolean{
+    const control = this.productForm.get(field)
+  
+    return !!(
+      control && control.invalid && 
+      (control.touched || control.dirty)
+    )
+  }
+
+  public getFieldError(field: string): string | null{
+
+    const control = this.productForm.get(field)
+  
+    return this.formErrorService.getFieldError(control)
+  
+  }
+
+
+
+  public saveProduct(): void{
+    console.log(this.productForm)
+
+
+    if(this.productForm.invalid){
+      return;
+    }
+
+    const payload = this.productForm.getRawValue()
+
+    this.productService.createProduct(payload as ProductRequest)
+    .subscribe((reponse:ApiResponse) =>{
+
+    })
+      
+  }
 
 
   

@@ -37,3 +37,12 @@ export interface ProductInterface {
   updated_at: string; // ISO date
   available_stock: number;
 }
+
+export interface ProductRequest {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  category: number;
+  image_url?: string;
+}
