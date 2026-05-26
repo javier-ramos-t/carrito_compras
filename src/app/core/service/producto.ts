@@ -24,6 +24,10 @@ export class ProductoService {
     return this.http.put<ApiResponse>(`${this.apiUrl}${id}/`, productData)
   }
 
+  public deleteProduct(id: number): Observable<ApiResponse>{
+    return this.http.delete<ApiResponse>(`${this.apiUrl}${id}/`)
+  }
+
 
 
 }

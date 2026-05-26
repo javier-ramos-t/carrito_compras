@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 
 import { ReactiveFormsModule, FormBuilder, Validators  } from '@angular/forms'
 import { FormErrorService } from '@shared/services/form-error';
+
+import { NotificationService } from '@shared/services/notification'
  
 @Component({
   selector: 'app-auth',
@@ -16,6 +18,8 @@ export class Auth{
 private authService = inject(AuthService)
 private router = inject(Router);
 private fb = inject(FormBuilder);
+public notificationService = inject(NotificationService);
+public message =  this.notificationService.message
 private formErrorService = inject(FormErrorService);
 
 public loginForm = this.fb.nonNullable.group({

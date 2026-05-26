@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal,computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '@environments/environment'
@@ -13,6 +13,13 @@ export class AuthService {
 
   private apiUrl = `${environment.apiUrl}/api/token/`;
 
+  private readonly accessToken = signal<string | null>(
+    localStorage.getItem('access_token')
+  )
+
+  public readonly isLoggedIn = computed(()=> !!this.accessToken())
+
+
   public login(username:string, password:string): Observable<AuthResponse>{
     return this.http.post<AuthResponse>(this.apiUrl, {username, password}).pipe(
       tap((response: AuthResponse)=>{
@@ -26,6 +33,7 @@ export class AuthService {
 
   private setAccessToken(token: string): void{
     localStorage.setItem('access_token',token)
+    this.accessToken.set(token)
   }
 
   public getAccessToken(): string | null{
@@ -34,6 +42,16 @@ export class AuthService {
 
   private setUser(user: AuthUser): void {
     localStorage.setItem('user', JSON.stringify(user) as string);
+  }
+
+  public logout(): void{
+    this.removeAccessToken()
+  }
+
+  private removeAccessToken(): void{
+    localStorage.removeItem('access_token')
+    this.accessToken.set(null)
+
   }
 
   public getUser(): AuthUser | null {

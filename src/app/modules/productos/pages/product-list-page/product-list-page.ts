@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, viewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, inject, signal,computed, viewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductTable } from '@modules/productos/components/product-table/product-table'
 
@@ -6,6 +6,9 @@ import   { ProductoService } from '@core/service/producto'
 import { ApiResponse, ProductInterface, ProductRequest, ProductUpdate } from '@modules/productos/models/product.models'
 import { ReactiveFormsModule, FormBuilder, Validators  } from '@angular/forms'
 import { FormErrorService } from '@shared/services/form-error';
+import { CategoryInterface } from '@modules/productos/models/category.models'
+import { CategoryService } from '@core/service/category'
+import { ToastService }from '@shared/services/toast';
 
 @Component({
   selector: 'app-product-list-page',
@@ -17,7 +20,8 @@ export class ProductListPage implements OnInit {
   constructor(
     private router: Router, 
     private routerActivate: ActivatedRoute,
-    private productService: ProductoService
+    private productService: ProductoService,
+    private categoryService: CategoryService
   ){
 
     console.log("ProductListPage");
@@ -26,8 +30,10 @@ export class ProductListPage implements OnInit {
   }
 
   private fb = inject(FormBuilder);
+  private toastService = inject(ToastService);
   private formErrorService = inject(FormErrorService);
   protected readonly editingId = signal<number | null>(null)
+  public categories = signal<CategoryInterface[]>([]);
 
   public productForm = this.fb.nonNullable.group({
     name:['', [Validators.required,Validators.minLength(3)]],
@@ -40,10 +46,18 @@ export class ProductListPage implements OnInit {
 
   public readonly products = signal<ProductInterface[]>([])
   private readonly dialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('ProductDialog')
-  protected readonly editDato = signal<string|null>(null)
-  goLogin():void {
-    this.router.navigate(['/login'])
-  }
+  private readonly confirmDeleteDialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('confirmDeleteDialog');
+
+  protected readonly pendingDeleteId = signal<number | null>(null);
+
+  protected readonly pendingDeleteName = computed(() => {
+    const id = this.pendingDeleteId();
+    if (id === null) {
+      return '';
+    }
+    return this.products().find((p) => p.id === id)?.name ?? `ID ${id}`;
+  });
+
 
   public onEdit(id: number):void{
 
@@ -60,14 +74,43 @@ export class ProductListPage implements OnInit {
       category: product.category,
     })
 
-    this.openCreateModal()
+    this.openCreateModal(true)
 
     console.log("Edicion del producto",id)
   }
 
   public onDelete(id: number):void{
-    console.log("Eliminar producto",id)
+
+    this.pendingDeleteId.set(id);
+    queueMicrotask(() => this.confirmDeleteDialogRef().nativeElement.showModal());
   }
+
+  protected confirmDelete(): void {
+    const id = this.pendingDeleteId();
+    if (id === null) {
+      return;
+    }
+
+    this.productService.deleteProduct(id).subscribe(() => {
+      this.toastService.show("Producto Eliminado correctamente.","success")
+      this.getAllProduct();
+      this.closeConfirmDeleteModal();
+    });
+  }
+
+  protected closeConfirmDeleteModal(): void {
+    this.confirmDeleteDialogRef().nativeElement.close();
+    this.pendingDeleteId.set(null);
+  }
+
+  protected onConfirmDeleteBackdrop(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeConfirmDeleteModal();
+    }
+  }
+
+
+
 
   private getAllProduct():void{
     this.productService.getAllProducts()
@@ -82,11 +125,14 @@ export class ProductListPage implements OnInit {
     this.getAllProduct();
   }
   public modalTitle(): string{
-    return this.editDato() ? 'Editar Producto': 'Nuevo producto'
+    return this.editingId() ? 'Editar Producto': 'Nuevo producto'
   }
 
-  public openCreateModal(): void{
-    this.editDato.set(null)
+  public openCreateModal(isEdit:boolean): void{
+   if (!isEdit) {
+     this.editingId.set(null)
+   }
+    this.getAllCategory()
     queueMicrotask(() =>this.dialogRef().nativeElement.showModal());
   }
 
@@ -121,6 +167,16 @@ export class ProductListPage implements OnInit {
     return this.formErrorService.getFieldError(control)
   
   }
+
+
+private getAllCategory(): void {
+  this.categoryService.getAllCategories()
+  .subscribe((data: any) => {
+    console.log(data.results);
+    this.categories.set(data.results ?? []);
+  });
+}
+
 
 
 

@@ -1,0 +1,37 @@
+.toast {
+
+    position: fixed;
+  
+    top: 20px;
+  
+    right: 20px;
+  
+    padding: 12px 20px;
+  
+    border-radius: 8px;
+  
+    color: white;
+  
+    font-weight: bold;
+  
+    z-index: 9999;
+  
+  }
+  
+  .success {
+  
+    background: green;
+  
+  }
+  
+  .error {
+  
+    background: red;
+  
+  }
+  
+  .warning {
+  
+    background: orange;
+  
+  }

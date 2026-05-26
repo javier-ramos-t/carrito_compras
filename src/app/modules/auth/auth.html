@@ -3,6 +3,12 @@
       <div>
         <h1 class="h1">Iniciar sesión</h1>
         <p class="muted">Accede para poder cargar productos.</p>
+        @if(message()){
+          <div class="alert">
+            {{message()}}
+          </div>
+        }
+        
       </div>
     </section>
   

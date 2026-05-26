@@ -1,0 +1,14 @@
+@if(toastService.visible()){
+
+    <div
+      class="toast"
+      [class.success]="toastService.type() === 'success'"
+      [class.error]="toastService.type() === 'error'"
+      [class.warning]="toastService.type() === 'warning'"
+    >
+  
+      {{ toastService.message() }}
+  
+    </div>
+  
+  }
