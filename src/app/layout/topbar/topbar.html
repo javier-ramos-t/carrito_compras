@@ -11,6 +11,9 @@
       <div class="topbar__actions">
         <div class="chip chip--ok" title="Estado de sesión (maqueta)">Invitado</div>
         <a class="btn btn--ghost" >Carrito</a>
+
+        <a class="btn btn--ghost" routerLink="/tienda" routerLinkActive="is-active">Tienda</a>
+
         @if (!authService.isLoggedIn()) {
           <a class="btn btn--ghost" routerLink="/login" routerLinkActive="is-active">Login</a>
         }
