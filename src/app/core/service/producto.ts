@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ApiResponse, ProductRequest, ProductUpdate } from '@modules/productos/models/product.models'
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs';
 import { environment } from '@environments/environment'
 
@@ -12,8 +12,14 @@ export class ProductoService {
 
   private http = inject(HttpClient)
 
-  public getAllProducts(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiUrl)
+  public getAllProducts(page=1, pageSize=10): Observable<ApiResponse> {
+
+    const params = new HttpParams()
+    .set('page', String(page))
+    .set('page_size', String(pageSize))
+
+
+    return this.http.get<ApiResponse>(this.apiUrl, {params})
   }
 
   public createProduct(productData: ProductRequest): Observable<ApiResponse>{

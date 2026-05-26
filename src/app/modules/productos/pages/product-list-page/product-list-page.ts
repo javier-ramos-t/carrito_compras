@@ -50,6 +50,13 @@ export class ProductListPage implements OnInit {
 
   protected readonly pendingDeleteId = signal<number | null>(null);
 
+  private readonly pageSize = 5
+  protected readonly totalCount = signal(0)
+  protected readonly currentPage = signal(1)
+  protected readonly totalPages = signal(1)
+  protected readonly hasNext = signal(false)
+  protected readonly hasPrevious = signal(false)
+
   protected readonly pendingDeleteName = computed(() => {
     const id = this.pendingDeleteId();
     if (id === null) {
@@ -110,19 +117,42 @@ export class ProductListPage implements OnInit {
   }
 
 
+  protected goToPreviousPage(): void{
+
+    if(!this.hasPrevious()) return;
+      this.currentPage.update((p) => Math.max(1, p - 1))
+      this.getAllProduct(this.currentPage())
+
+  }
+
+  protected goToNextPage(): void{
+    if(!this.hasNext()) return;
+    this.currentPage.update((p) => p + 1)
+    this.getAllProduct(this.currentPage())
+  }
 
 
-  private getAllProduct():void{
-    this.productService.getAllProducts()
+
+
+
+  private getAllProduct(page = this.currentPage()):void{
+
+    this.productService.getAllProducts(page, this.pageSize)
     .subscribe((data:ApiResponse)=>{
       console.log(data.results)
       this.products.set(data.results?? [])
+
+      this.totalCount.set(data.count ?? 0)
+      this.currentPage.set(data.current_page ?? page)
+      this.totalPages.set(data.total_pages ?? 1)
+      this.hasNext.set(!!data.has_next)
+      this.hasPrevious.set(!!data.has_previous)
     });
   }
 
 
   public ngOnInit():void{
-    this.getAllProduct();
+    this.getAllProduct(1);
   }
   public modalTitle(): string{
     return this.editingId() ? 'Editar Producto': 'Nuevo producto'

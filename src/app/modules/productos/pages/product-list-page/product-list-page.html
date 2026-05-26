@@ -21,6 +21,25 @@
         (edit)="onEdit($event)"
         (delete)="onDelete($event)"
         />
+
+        <footer class="pager">
+          <button
+            class="btn btn--ghost btn--sm"
+            type="button"
+           (click)="goToPreviousPage()"
+           [disabled]="!hasPrevious()"
+          >
+            Anterior
+          </button>
+          <button
+            class="btn btn--ghost btn--sm"
+            type="button"
+            (click)="goToNextPage()"
+            [disabled]="!hasNext()"
+          >
+            Siguiente
+          </button>
+        </footer>
         
   
       </article>
