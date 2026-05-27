@@ -1,1 +1,105 @@
-<p>pedidos works!</p>
+<main class="container page">
+    <section class="page__head page__head--wide">
+      <div>
+        <h1 class="h1">Mis pedidos</h1>
+        <p class="muted">Historial de compras</p>
+      </div>
+      <div class="page__meta">
+        <a class="btn btn--ghost" routerLink="/tienda">Ir a la tienda</a>
+      </div>
+    </section>
+  
+    <section class="grid grid--single-wide">
+      <article class="card">
+        <header class="card__head">
+          <h2 class="h2">Órdenes</h2>
+          <div class="muted">
+            {{ totalCount() }} pedidos · Página {{ currentPage() }} de {{ totalPages() }}
+          </div>
+        </header>
+  
+        @if (orders().length === 0) {
+          <p class="empty-msg muted">Aún no tienes pedidos.</p>
+        } @else {
+          <div class="table-wrap">
+            <table class="table" aria-label="Mis pedidos">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Productos</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th class="col-num">Total</th>
+                  <th class="col-actions">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (order of orders(); track order.id) {
+                  <tr>
+                    <td>{{ order.id }}</td>
+                    <td>
+                      <ul class="order-items">
+                        @for (item of order.items; track item.id) {
+                          <li class="order-items__row">
+                            <app-product-cell
+                              [imageUrl]="item.product_image"
+                              [name]="item.product_name"
+                              [subtitle]="'× ' + item.quantity"
+                            />
+                          </li>
+                        }
+                      </ul>
+                    </td>
+                    <td>{{ order.created_at | date: 'short' }}</td>
+                    <td>
+                      <span
+                        class="status-pill"
+                        [class.status-pill--pending]="order.status === 'pending'"
+                        [class.status-pill--processing]="order.status === 'processing'"
+                        [class.status-pill--completed]="order.status === 'completed'"
+                        [class.status-pill--cancelled]="order.status === 'cancelled'"
+                      >
+                        {{ order.status_display }}
+                      </span>
+                    </td>
+                    <td class="col-num">{{ order.total_amount }}</td>
+                    <td class="col-actions">
+                      @if (canCancel(order)) {
+                        <button
+                          class="btn btn--danger btn--sm"
+                          type="button"
+                          (click)="cancelOrder(order)"
+                        >
+                          Cancelar
+                        </button>
+                      }
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+  
+          <footer class="pager">
+            <button
+              class="btn btn--ghost btn--sm"
+              type="button"
+              (click)="goToPreviousPage()"
+              [disabled]="!hasPrevious()"
+            >
+              Anterior
+            </button>
+            <button
+              class="btn btn--ghost btn--sm"
+              type="button"
+              (click)="goToNextPage()"
+              [disabled]="!hasNext()"
+            >
+              Siguiente
+            </button>
+          </footer>
+        }
+      </article>
+    </section>
+  </main>
+  
