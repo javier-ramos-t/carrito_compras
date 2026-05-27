@@ -17,8 +17,12 @@ export class AuthService {
     localStorage.getItem('access_token')
   )
 
-  public readonly isLoggedIn = computed(()=> !!this.accessToken())
+  public readonly user = signal<AuthUser | null>(
+    this.getStoredUser()
+  );
 
+  public readonly isLoggedIn = computed(()=> !!this.accessToken())
+  public readonly isAdmin = computed(() => this.user()?.group === 'admin');
 
   public login(username:string, password:string): Observable<AuthResponse>{
     return this.http.post<AuthResponse>(this.apiUrl, {username, password}).pipe(
@@ -51,6 +55,14 @@ export class AuthService {
   private removeAccessToken(): void{
     localStorage.removeItem('access_token')
     this.accessToken.set(null)
+
+  }
+
+  private getStoredUser():AuthUser | null {
+
+    const user = localStorage.getItem('user');
+
+    return user? JSON.parse(user): null;
 
   }
 

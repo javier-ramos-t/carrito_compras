@@ -1,0 +1,60 @@
+.empty-msg {
+    padding: 16px;
+  }
+  
+  .order-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+    min-width: 200px;
+  }
+  
+  .status-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #ffffff;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  
+  .status-pill::before{
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: currentColor;
+    box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.06);
+  }
+  
+  .status-pill--pending{
+    color: #6b7280;
+    background: #f9fafb;
+    border-color: #e5e7eb;
+  }
+  
+  .status-pill--processing{
+    color: #1d4ed8;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+  }
+  
+  .status-pill--completed{
+    color: #047857;
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+  }
+  
+  .status-pill--cancelled{
+    color: #b91c1c;
+    background: #fef2f2;
+    border-color: #fecaca;
+  }

@@ -1,28 +1,30 @@
 <header class="topbar">
-    <div class="container topbar__inner">
-      <a class="brand" routerLink="/" aria-label="Ir al carrito">
-        <div class="brand__logo" aria-hidden="true">CH</div>
-        <div class="brand__text">
-          <div class="brand__name">Carrito</div>
-          <div class="brand__tag">UI tienda</div>
-        </div>
-      </a>
-  
-      <div class="topbar__actions">
-        <div class="chip chip--ok" title="Estado de sesión (maqueta)">Invitado</div>
-        <a class="btn btn--ghost" >Carrito</a>
-
-        <a class="btn btn--ghost" routerLink="/tienda" routerLinkActive="is-active">Tienda</a>
-
-        @if (!authService.isLoggedIn()) {
-          <a class="btn btn--ghost" routerLink="/login" routerLinkActive="is-active">Login</a>
-        }
-        @if (authService.isLoggedIn()) {
-        <a class="btn btn--primary" routerLink="/productos" routerLinkActive="is-active">Productos</a>
-
-        <button class="btn btn--ghost" (click)="logout()">Logout</button>
-      }
+  <div class="container topbar__inner">
+    <a class="brand" routerLink="/tienda" aria-label="Ir a la tienda">
+      <div class="brand__logo" aria-hidden="true">CH</div>
+      <div class="brand__text">
+        <div class="brand__name">Carrito</div>
+        <div class="brand__tag">UI tienda</div>
       </div>
+    </a>
+
+    <div class="topbar__actions">
+      <a class="btn btn--ghost" routerLink="/tienda" routerLinkActive="is-active">Tienda</a>
+
+      @if (authService.isLoggedIn()) {
+        <a class="btn btn--ghost" routerLink="/carrito" routerLinkActive="is-active">Mi carrito</a>
+        <a class="btn btn--ghost" routerLink="/mis-pedidos" routerLinkActive="is-active">Mis pedidos</a>
+
+        @if (authService.isAdmin()) {
+          <a class="btn btn--primary" routerLink="/productos" routerLinkActive="is-active">
+            Administrar productos
+          </a>
+        }
+
+        <button class="btn btn--ghost" type="button" (click)="logout()">Logout</button>
+      } @else {
+        <a class="btn btn--primary" routerLink="/login" routerLinkActive="is-active">Login</a>
+      }
     </div>
-  </header>
-  
+  </div>
+</header>

@@ -25,7 +25,7 @@ export class Tienda implements OnInit {
   private productoService = inject(ProductoService);
   private toastService = inject(ToastService);
   protected readonly products = signal<ProductInterface[]>([]);
-
+  private readonly router = inject(Router);
   private readonly cartService = inject(CartService);
 
 
