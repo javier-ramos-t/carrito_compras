@@ -16,7 +16,15 @@ export class FormErrorService {
     }
 
     if(control?.errors?.['minlength']){
-      return 'Minimo 6 caracteres'
+      return 'Minimo ' + control.errors['minlength'].requiredLength + ' caracteres'
+    }
+
+    if(control?.errors?.['maxlength']){
+      return 'Maximo ' + control.errors['maxlength'].requiredLength + ' caracteres'
+    }
+
+    if(control?.errors?.['min']){
+      return 'El valor debe ser mayor o igual a ' + control.errors['min'].min
     }
 
     return null

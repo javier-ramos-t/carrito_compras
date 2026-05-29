@@ -1,0 +1,22 @@
+<main class="container" style="max-width: 450px; margin-top: 50px;">
+  <div class="card">
+    <header class="card__head" style="text-align: center;">
+      <h1 class="h2">Recuperar Contraseña</h1>
+      <p class="muted">Ingresa tu correo para recibir un enlace de restablecimiento.</p>
+    </header>
+
+    <form class="form" [formGroup]="resetForm" (ngSubmit)="enviarEnlace()">
+      <div class="field">
+        <label class="label">Correo Electrónico</label>
+        <input class="input" type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+      </div>
+
+      <div class="form__actions" style="flex-direction: column; gap: 15px; margin-top: 20px;">
+        <button class="btn btn--primary" style="width: 100%;" type="submit">Enviar Enlace</button>
+        <a class="btn btn--ghost" style="width: 100%; text-align: center;" routerLink="/login">
+          Volver al Login
+        </a>
+      </div>
+    </form>
+  </div>
+</main>

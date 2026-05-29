@@ -10,6 +10,8 @@ import { environment } from '@environments/environment'
 export class ProductoService {
   private apiUrl = `${environment.apiUrl}/api/shoppingcart/products`;
 
+  private apiUrlPublic = `${environment.apiUrl}/api/shoppingcart/public-products`;
+
   private http = inject(HttpClient)
 
   public getAllProducts(page=1, pageSize=10): Observable<ApiResponse> {
@@ -34,6 +36,12 @@ export class ProductoService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}/`)
   }
 
+  public getPublicProducts(page=1, pageSize=10): Observable<ApiResponse> {
 
+    const params = new HttpParams()
+    .set('page', String(page))
+    .set('page_size', String(pageSize)) 
 
+    return this.http.get<ApiResponse>(this.apiUrlPublic, {params})
+  }
 }

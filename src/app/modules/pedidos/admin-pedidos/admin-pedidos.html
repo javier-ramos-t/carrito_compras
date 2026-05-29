@@ -1,0 +1,44 @@
+<main class="container page">
+  <section class="page__head page__head--wide">
+    <div>
+      <h1 class="h1">Gestión de Pedidos</h1>
+      <p class="muted">Panel de administrador</p>
+    </div>
+  </section>
+
+  <section class="grid grid--single-wide">
+    <article class="card">
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th># Orden</th>
+              <th>Cliente</th>
+              <th>Fecha</th>
+              <th class="col-num">Total</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (order of allOrders(); track order.id) {
+              <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.customer }}</td>
+                <td>{{ order.date }}</td>
+                <td class="col-num">${{ order.total }}</td>
+                <td>
+                  <select class="input" style="padding: 4px; height: auto;" (change)="updateOrderStatus(order.id, $event)">
+                    <option value="pending" [selected]="order.status === 'pending'">Pendiente</option>
+                    <option value="processing" [selected]="order.status === 'processing'">En proceso</option>
+                    <option value="completed" [selected]="order.status === 'completed'">Completado</option>
+                    <option value="cancelled" [selected]="order.status === 'cancelled'">Cancelado</option>
+                  </select>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </section>
+</main>

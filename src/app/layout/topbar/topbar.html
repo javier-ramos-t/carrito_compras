@@ -16,6 +16,9 @@
         <a class="btn btn--ghost" routerLink="/mis-pedidos" routerLinkActive="is-active">Mis pedidos</a>
 
         @if (authService.isAdmin()) {
+          <a class="btn btn--ghost" routerLink="/admin-pedidos" routerLinkActive="is-active">
+            Administrar pedidos
+          </a>
           <a class="btn btn--primary" routerLink="/productos" routerLinkActive="is-active">
             Administrar productos
           </a>

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, viewChild, ElementRef } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ToastService } from '@shared/services/toast';
 import { ProductCell } from '@shared/components/product-cell/product-cell';
@@ -23,6 +23,8 @@ export class Pedidos {
   protected readonly totalPages = signal(1);
   protected readonly hasNext = signal(false);
   protected readonly hasPrevious = signal(false);
+  private readonly confirmCancelDialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('confirmCancelDialog');
+  protected readonly pendingCancelOrder = signal<OrderInterface | null>(null);
 
 
   protected goToPreviousPage(): void {
@@ -52,15 +54,35 @@ export class Pedidos {
     return order.status === 'pending' || order.status === 'processing';
   }
 
-  protected cancelOrder(order: OrderInterface): void {
+  protected confirmCancel(): void {
+    const order = this.pendingCancelOrder();
+    if (!order) return;
+
     this.orderService.cancelOrder(order.id).subscribe(() => {
       this.toastService.show(`Orden #${order.id} cancelada`, 'success');
       this.loadOrders(this.currentPage());
+      this.closeConfirmCancelModal();
     });
   }
 
   public ngOnInit(): void {
     this.loadOrders(1);
+  }
+
+  protected openConfirmCancel(order: OrderInterface): void {
+    this.pendingCancelOrder.set(order);
+    queueMicrotask(() => this.confirmCancelDialogRef().nativeElement.showModal());
+  }
+
+  protected closeConfirmCancelModal(): void {
+    this.confirmCancelDialogRef().nativeElement.close();
+    this.pendingCancelOrder.set(null);
+  }
+
+  protected onConfirmCancelBackdrop(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeConfirmCancelModal();
+    }
   }
 
 }

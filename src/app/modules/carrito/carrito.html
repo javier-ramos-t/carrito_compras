@@ -55,7 +55,7 @@
                         <button
                           class="btn btn--danger btn--sm"
                           type="button"
-                          (click)="removeItem(item)"
+                          (click)="openConfirmRemove(item)"
                         >
                           Quitar
                         </button>
@@ -95,6 +95,9 @@
               formControlName="shipping_address"
               placeholder="Calle, número, colonia, ciudad"
             ></textarea>
+            @if (ifFieldInvalid('shipping_address')) {
+              <p class="error">{{ getFieldError('shipping_address') }}</p>
+            }
           </div>
           <div class="field">
             <label class="label" for="ship-notes">Notas (opcional)</label>
@@ -109,3 +112,27 @@
     </div>
   </dialog>
   
+
+  <dialog #confirmRemoveDialog class="modal modal--confirm" (click)="onConfirmRemoveBackdrop($event)">
+  <div class="modal__surface card" (click)="$event.stopPropagation()">
+    <header class="card__head modal__head">
+      <h2 class="h2">Quitar producto</h2>
+    </header>
+
+    <div class="modal__body">
+      <p>
+        ¿Seguro que deseas quitar 
+        <strong>{{ pendingRemoveItem()?.product_name }}</strong> de tu carrito?
+      </p>
+    </div>
+
+    <footer class="modal__foot">
+      <button class="btn btn--ghost" type="button" (click)="closeConfirmRemoveModal()">
+        Cancelar
+      </button>
+      <button class="btn btn--danger" type="button" (click)="confirmRemove()">
+        Sí, quitar
+      </button>
+    </footer>
+  </div>
+</dialog>

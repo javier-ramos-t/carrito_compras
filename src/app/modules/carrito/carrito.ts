@@ -5,6 +5,8 @@ import { CartService } from '@core/service/cart';
 import { CartInterface, CartItemInterface } from '@modules/carrito/carrito.models';
 import { ToastService } from '@shared/services/toast';
 import { ProductCell } from '@shared/components/product-cell/product-cell';
+import { FormErrorService } from '@shared/services/form-error';
+
 
 
 @Component({
@@ -17,10 +19,11 @@ export class Carrito implements OnInit  {
   private readonly cartService = inject(CartService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly formErrorService = inject(FormErrorService);
   private readonly toastService = inject(ToastService);
-
   private readonly checkoutDialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('checkoutDialog');
-
+  private readonly confirmRemoveDialogRef = viewChild.required<ElementRef<HTMLDialogElement>>('confirmRemoveDialog');
+  protected readonly pendingRemoveItem = signal<CartItemInterface | null>(null);
   protected readonly cart = signal<CartInterface | null>(null);
 
   protected readonly checkoutForm = this.fb.nonNullable.group({
@@ -51,14 +54,27 @@ export class Carrito implements OnInit  {
 
   }
 
-  protected removeItem(item: CartItemInterface): void {
+  protected confirmRemove(): void {
     const cart = this.cart();
-    if (!cart) return;
+    const item = this.pendingRemoveItem();
+    if (!cart || !item) return;
 
     this.cartService.removeItem(cart.id, item.id).subscribe((updated) => {
       this.cart.set(updated);
       this.toastService.show('Producto quitado del carrito', 'success');
+      this.closeConfirmRemoveModal();
     });
+  }
+
+  protected closeConfirmRemoveModal(): void {
+    this.confirmRemoveDialogRef().nativeElement.close();
+    this.pendingRemoveItem.set(null);
+  }
+
+  protected onConfirmRemoveBackdrop(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeConfirmRemoveModal();
+    }
   }
 
   protected closeCheckout(): void {
@@ -106,8 +122,23 @@ export class Carrito implements OnInit  {
       });
   }
 
+  public ifFieldInvalid(field: string): boolean{
+  const control = this.checkoutForm.get(field)
+  return !! (
+    control && control.invalid && 
+    (control.touched || control.dirty)
+  )
+}
 
+public getFieldError(field: string): string | null{
+  const control = this.checkoutForm.get(field)
+  return this.formErrorService.getFieldError(control)
+}
   
 
+protected openConfirmRemove(item: CartItemInterface): void {
+    this.pendingRemoveItem.set(item);
+    queueMicrotask(() => this.confirmRemoveDialogRef().nativeElement.showModal());
+  }
 
 }

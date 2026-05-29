@@ -1,0 +1,31 @@
+<div class="inicio-container">
+  
+  <div class="cabecera">
+    <h1>Productos Destacados</h1>
+    <p>Descubre los mejores productos de nuestra tienda</p>
+  </div>
+
+  @if (products().length > 0 && productoVisible()) {
+    <div class="carrusel">
+      
+      <button class="btn-flecha" (click)="anterior()">&#10094;</button>
+
+      <div class="producto-card">
+        <img [src]="productoVisible()?.image_url" [alt]="productoVisible()?.name" class="img-producto">
+        
+        <div class="info">
+          <h2>{{ productoVisible()?.name }}</h2>
+          <p class="precio">${{ productoVisible()?.price }}</p>
+          
+          <button class="btn-azul" (click)="irATienda()">Ver catálogo completo</button>
+        </div>
+      </div>
+
+      <button class="btn-flecha" (click)="siguiente()">&#10095;</button>
+      
+    </div>
+  } @else {
+    <p>Cargando productos destacados...</p>
+  }
+
+</div>

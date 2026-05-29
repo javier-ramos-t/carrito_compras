@@ -12,8 +12,12 @@ export const guestGuard: CanActivateFn = (route, state) => {
   
 
   if(token){
-    console.log("valido");
-    return router.createUrlTree(['/productos'])
+
+    if(authService.isAdmin()){
+      return router.createUrlTree(['/productos'])
+    } else {
+    return router.createUrlTree(['/tienda'])
+    }
   }
   
   return true;

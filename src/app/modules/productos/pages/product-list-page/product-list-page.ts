@@ -38,9 +38,9 @@ export class ProductListPage implements OnInit {
   public productForm = this.fb.nonNullable.group({
     name:['', [Validators.required,Validators.minLength(3)]],
     description:['', [Validators.required,Validators.minLength(5)]],
-    price:[0, [Validators.required,Validators.minLength(0.01)]],
-    stock:[0, [Validators.required,Validators.minLength(0)]],
-    category:[0, [Validators.required,Validators.minLength(1)]]
+    price:[0, [Validators.required,Validators.min(0.01)]],
+    stock:[0, [Validators.required,Validators.min(0)]],
+    category:[0, [Validators.required,Validators.min(1)]]
   }
   )
 
@@ -213,6 +213,7 @@ private getAllCategory(): void {
   public saveProduct(): void{
 
     if(this.productForm.invalid){
+      this.productForm.markAllAsTouched()
       return;
     }
 

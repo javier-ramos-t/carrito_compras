@@ -43,11 +43,11 @@
                   <input type="checkbox" />
                   <span>Recordarme</span>
                 </label>
-                <a class="link" href="#" (click)="$event.preventDefault()">¿Olvidaste tu contraseña?</a>
+                <a class="link" routerLink="/recuperar-pass">¿Olvidaste tu contraseña?</a>
               </div>
               <div class="form__actions">
                 <button class="btn btn--primary" type="submit" >Entrar</button>
-                <button class="btn btn--ghost" type="button">Crear cuenta</button>
+                <button class="btn btn--ghost" routerLink="/registro" type="button">Crear cuenta</button>
               </div>
             </form>
           </article>

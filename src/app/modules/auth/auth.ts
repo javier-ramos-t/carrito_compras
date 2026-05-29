@@ -1,16 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '@core/service/auth'
 import { AuthResponse } from '@modules/auth/models/auth.models';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { ReactiveFormsModule, FormBuilder, Validators  } from '@angular/forms'
 import { FormErrorService } from '@shared/services/form-error';
+import { ToastService } from '@shared/services/toast';
+import { NotificationService } from '@shared/services/notification';
 
-import { NotificationService } from '@shared/services/notification'
  
 @Component({
   selector: 'app-auth',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
 })
@@ -19,6 +20,7 @@ private authService = inject(AuthService)
 private router = inject(Router);
 private fb = inject(FormBuilder);
 public notificationService = inject(NotificationService);
+public toastService = inject(ToastService);
 public message =  this.notificationService.message
 private formErrorService = inject(FormErrorService);
 
@@ -31,6 +33,8 @@ public loginForm = this.fb.nonNullable.group({
 public login(): void{
   console.log(this.loginForm)
   if(this.loginForm.invalid){
+    this.loginForm.markAllAsTouched();
+    this.toastService.show('Usuario o contraseña inválidos.', 'error');
     return;
   }
 

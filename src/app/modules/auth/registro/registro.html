@@ -1,0 +1,32 @@
+<main class="container" style="max-width: 450px; margin-top: 50px;">
+  <div class="card">
+    <header class="card__head" style="text-align: center;">
+      <h1 class="h2">Crear Cuenta</h1>
+      <p class="muted">Únete para gestionar tus compras.</p>
+    </header>
+
+    <form class="form" [formGroup]="registerForm" (ngSubmit)="registrar()">
+      <div class="field">
+        <label class="label">Nombre de Usuario</label>
+        <input class="input" type="text" formControlName="username" placeholder="Tu usuario" />
+      </div>
+
+      <div class="field">
+        <label class="label">Correo Electrónico</label>
+        <input class="input" type="email" formControlName="email" placeholder="correo@ejemplo.com" />
+      </div>
+
+      <div class="field">
+        <label class="label">Contraseña</label>
+        <input class="input" type="password" formControlName="password" placeholder="Mínimo 6 caracteres" />
+      </div>
+
+      <div class="form__actions" style="flex-direction: column; gap: 15px; margin-top: 20px;">
+        <button class="btn btn--primary" style="width: 100%;" type="submit">Registrarse</button>
+        <a class="btn btn--ghost" style="width: 100%; text-align: center;" routerLink="/login">
+          ¿Ya tienes cuenta? Inicia sesión
+        </a>
+      </div>
+    </form>
+  </div>
+</main>

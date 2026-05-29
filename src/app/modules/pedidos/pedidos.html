@@ -68,7 +68,7 @@
                         <button
                           class="btn btn--danger btn--sm"
                           type="button"
-                          (click)="cancelOrder(order)"
+                          (click)="openConfirmCancel(order)"
                         >
                           Cancelar
                         </button>
@@ -103,3 +103,28 @@
     </section>
   </main>
   
+
+  <dialog #confirmCancelDialog class="modal modal--confirm" (click)="onConfirmCancelBackdrop($event)">
+  <div class="modal__surface card" (click)="$event.stopPropagation()">
+    <header class="card__head modal__head">
+      <h2 class="h2">Cancelar pedido</h2>
+    </header>
+
+    <div class="modal__body">
+      <p>
+        ¿Seguro que deseas cancelar el pedido 
+        <strong>#{{ pendingCancelOrder()?.id }}</strong>?
+      </p>
+      <p class="muted">Esta acción no se puede deshacer.</p>
+    </div>
+
+    <footer class="modal__foot">
+      <button class="btn btn--ghost" type="button" (click)="closeConfirmCancelModal()">
+        Volver
+      </button>
+      <button class="btn btn--danger" type="button" (click)="confirmCancel()">
+        Sí, cancelar
+      </button>
+    </footer>
+  </div>
+</dialog>

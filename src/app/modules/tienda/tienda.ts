@@ -63,7 +63,7 @@ export class Tienda implements OnInit {
 
 
   private loadProducts(page: number): void {
-    this.productoService.getAllProducts(page, this.pageSize).subscribe((response: ApiResponse) => {
+    this.productoService.getPublicProducts(page, this.pageSize).subscribe((response: ApiResponse) => {
       this.products.set(response.results ?? []);
       this.totalCount.set(response.count ?? 0);
       this.currentPage.set(response.current_page ?? page);

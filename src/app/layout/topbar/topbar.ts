@@ -2,6 +2,7 @@ import { Component,inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '@core/service/auth'
 import { Router } from '@angular/router';
+import { ToastService } from '@shared/services/toast';
 
 @Component({
   selector: 'app-topbar',
@@ -12,10 +13,11 @@ import { Router } from '@angular/router';
 export class Topbar {
   public  authService = inject(AuthService)
   private router = inject(Router);
-
+  private toastService = inject(ToastService);
 
   public logout(): void {
     this.authService.logout();
+    this.toastService.show('Has cerrado sesión', 'success');
     this.router.navigate(['/tienda']);
   }
 

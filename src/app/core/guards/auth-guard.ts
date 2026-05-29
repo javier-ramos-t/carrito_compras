@@ -8,11 +8,17 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router)
   const token = authService.getAccessToken()
 
-  if(token){
-    return true;
+  if(!token){
+    return router.createUrlTree(['/login']);
   }
 
-  return router.createUrlTree(['/login'])
+  const urlDestino = state.url;
+
+  if (urlDestino === '/productos' && !authService.isAdmin()) {
+    return router.createUrlTree(['/tienda']);
+  }
+
+  return true;
 
   
 };

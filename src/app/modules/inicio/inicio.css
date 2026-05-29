@@ -1,0 +1,69 @@
+.inicio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 80px);
+}
+
+.cabecera {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.carrusel {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.btn-flecha {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-flecha:hover {
+  background: #0d6efd; 
+  color: white;
+  border-color: #0d6efd;
+}
+
+.producto-card {
+  background: white;
+  flex-grow: 1;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.img-producto {
+  height: 250px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.precio {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0d6efd;
+  margin: 10px 0 20px 0;
+}
+
+.btn-azul {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+}

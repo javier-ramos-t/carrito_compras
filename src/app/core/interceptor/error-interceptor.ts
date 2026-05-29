@@ -20,8 +20,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if(error.status === 0) {
         console.error('Error de red', error.message)
       } else if (error.status === 401) {
+        if (req.url.includes('token')) {
+          notificationService.show("El usuario o contraseña no existen")
+        } else {
         notificationService.show("Sesion expirada")
         router.navigate(['/login'])
+        }
       }else if (error.status === 404) {
         console.error('Recurso no encontrado', error.message)
       } else if (error.status === 503) {
